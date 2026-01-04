@@ -2,6 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
+import { Database } from '@/lib/supabase/client'
+import { SupabaseClient } from '@supabase/supabase-js'
 
 /**
  * Increment the download count for a resource and return its file URL.
@@ -12,13 +14,13 @@ export async function incrementDownload(resourceId: string) {
     return { error: 'Missing resource id' }
   }
 
-  const supabase = createSupabaseServerClient()
+  const supabase = createSupabaseServerClient() as unknown as SupabaseClient<Database>
 
   const { data: resource, error: fetchError } = await supabase
     .from('resources')
     .select('downloads, slug')
     .eq('id', resourceId)
-    .single() as { data: any; error: any }
+    .single()
 
   if (fetchError || !resource) {
     console.error('Failed to load resource for download', fetchError)

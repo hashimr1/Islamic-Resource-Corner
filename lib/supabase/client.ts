@@ -64,6 +64,7 @@ export type Database = {
           status: 'pending' | 'approved' | 'rejected'
           user_id: string
           downloads: number
+          slug: string | null
           created_at: string
           updated_at: string
         }
@@ -88,6 +89,7 @@ export type Database = {
           status?: 'pending' | 'approved' | 'rejected'
           user_id: string
           downloads?: number
+          slug?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -112,6 +114,7 @@ export type Database = {
           status?: 'pending' | 'approved' | 'rejected'
           user_id?: string
           downloads?: number
+          slug?: string | null
           created_at?: string
           updated_at?: string
         }
