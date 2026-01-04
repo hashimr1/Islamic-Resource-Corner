@@ -47,6 +47,7 @@ export default async function AdminPage() {
     .select(
       `
         id,
+        slug,
         title,
         status,
         resource_types,
@@ -152,7 +153,7 @@ export default async function AdminPage() {
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button asChild variant="outline" size="sm">
-                          <Link href={`/resource/${resource.id}`}>
+                          <Link href={`/resource/${resource.slug || resource.id}`}>
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </Link>

@@ -154,55 +154,55 @@ export default function UploadFormClient({ initialData }: UploadFormClientProps)
     resolver: zodResolver(uploadFormSchema),
     defaultValues: initialData
       ? {
-          title: initialData.title || '',
-          shortDescription: initialData.short_description || '',
-          detailedDescription: initialData.description || '',
-          targetGrades: initialData.target_grades || [],
-          resourceTypes: initialData.resource_types || [],
-          topicsQuran: initialData.topics_quran || [],
-          topicsDuasZiyarat: initialData.topics_duas_ziyarat || [],
-          topicsAqaid: initialData.topics_aqaid || [],
-          topicsFiqh: initialData.topics_fiqh || [],
-          topicsAkhlaq: initialData.topics_akhlaq || [],
-          topicsTarikh: initialData.topics_tarikh || [],
-          topicsPersonalities: initialData.topics_personalities || [],
-          topicsIslamicMonths: initialData.topics_islamic_months || [],
-          topicsLanguages: initialData.topics_languages || [],
-          topicsCurriculum: initialData.topics_curriculum || [],
-          topicsOther: initialData.topics_other || [],
-          attachments: [],
-          externalLinks: existingExternalLinks,
-          additionalImages: [],
-          creditOrganization: initialData.credit_organization || '',
-          creditOther: initialData.credit_other || '',
-          copyrightVerified: initialData.copyright_verified ?? false,
-          featuredImage: undefined as any,
-        }
+        title: initialData.title || '',
+        shortDescription: initialData.short_description || '',
+        detailedDescription: initialData.description || '',
+        targetGrades: initialData.target_grades || [],
+        resourceTypes: initialData.resource_types || [],
+        topicsQuran: initialData.topics_quran || [],
+        topicsDuasZiyarat: initialData.topics_duas_ziyarat || [],
+        topicsAqaid: initialData.topics_aqaid || [],
+        topicsFiqh: initialData.topics_fiqh || [],
+        topicsAkhlaq: initialData.topics_akhlaq || [],
+        topicsTarikh: initialData.topics_tarikh || [],
+        topicsPersonalities: initialData.topics_personalities || [],
+        topicsIslamicMonths: initialData.topics_islamic_months || [],
+        topicsLanguages: initialData.topics_languages || [],
+        topicsCurriculum: initialData.topics_curriculum || [],
+        topicsOther: initialData.topics_other || [],
+        attachments: [],
+        externalLinks: existingExternalLinks,
+        additionalImages: [],
+        creditOrganization: initialData.credit_organization || '',
+        creditOther: initialData.credit_other || '',
+        copyrightVerified: initialData.copyright_verified ?? false,
+        featuredImage: undefined as any,
+      }
       : {
-          title: '',
-          shortDescription: '',
-          detailedDescription: '',
-          targetGrades: [],
-          resourceTypes: [],
-          topicsQuran: [],
-          topicsDuasZiyarat: [],
-          topicsAqaid: [],
-          topicsFiqh: [],
-          topicsAkhlaq: [],
-          topicsTarikh: [],
-          topicsPersonalities: [],
-          topicsIslamicMonths: [],
-          topicsLanguages: [],
-          topicsCurriculum: [],
-          topicsOther: [],
-          attachments: [],
-          externalLinks: [],
-          additionalImages: [],
-          creditOrganization: '',
-          creditOther: '',
-          copyrightVerified: false,
-          featuredImage: undefined as any,
-        },
+        title: '',
+        shortDescription: '',
+        detailedDescription: '',
+        targetGrades: [],
+        resourceTypes: [],
+        topicsQuran: [],
+        topicsDuasZiyarat: [],
+        topicsAqaid: [],
+        topicsFiqh: [],
+        topicsAkhlaq: [],
+        topicsTarikh: [],
+        topicsPersonalities: [],
+        topicsIslamicMonths: [],
+        topicsLanguages: [],
+        topicsCurriculum: [],
+        topicsOther: [],
+        attachments: [],
+        externalLinks: [],
+        additionalImages: [],
+        creditOrganization: '',
+        creditOther: '',
+        copyrightVerified: false,
+        featuredImage: undefined as any,
+      },
   })
 
   const {
@@ -296,14 +296,14 @@ export default function UploadFormClient({ initialData }: UploadFormClientProps)
       const fallbackLegacyAttachment =
         initialData?.file_url && mergedAttachments.length === 0
           ? [
-              {
-                id: 'legacy-file',
-                name: initialData.file_url?.split('/')?.pop?.() || 'Resource file',
-                url: initialData.file_url,
-                size: initialData.file_size?.toString?.() || '',
-                type: initialData.file_type || '',
-              } satisfies AttachmentPayload,
-            ]
+            {
+              id: 'legacy-file',
+              name: initialData.file_url?.split('/')?.pop?.() || 'Resource file',
+              url: initialData.file_url,
+              size: initialData.file_size?.toString?.() || '',
+              type: initialData.file_type || '',
+            } satisfies AttachmentPayload,
+          ]
           : []
 
       const allAttachments = mergedAttachments.length ? mergedAttachments : fallbackLegacyAttachment
@@ -349,7 +349,7 @@ export default function UploadFormClient({ initialData }: UploadFormClientProps)
         }
 
         setUploadProgress('Updated! Redirecting...')
-        router.push(`/resource/${initialData.id}`)
+        router.push(`/resource/${result.slug || initialData.slug || initialData.id}`)
         return
       }
 

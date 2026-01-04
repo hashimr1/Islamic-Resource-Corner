@@ -24,16 +24,18 @@ import { DownloadButton } from './download-button'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default async function ResourcePage({ params }: { params: { id: string } }) {
+export default async function ResourcePage({ params }: { params: { slug: string } }) {
   const supabase = createSupabaseServerClient()
   const userData = (await getCurrentUser()) as any
 
-  const { data: resource, error } = (await supabase
+  // Try to find resource by slug
+  let query = supabase
     .from('resources')
     .select(
       `
         id,
         title,
+        slug,
         description,
         short_description,
         file_url,
@@ -71,8 +73,65 @@ export default async function ResourcePage({ params }: { params: { id: string } 
         )
       `
     )
-    .eq('id', params.id)
-    .single()) as { data: any; error: any }
+    .eq('slug', params.slug)
+
+  let { data: resource, error } = (await query.single()) as { data: any; error: any }
+
+  // If not found by slug, and param looks like a UUID, try finding by ID
+  // This supports legacy links
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(params.slug)
+
+  if ((error || !resource) && isUuid) {
+    const idQuery = supabase
+      .from('resources')
+      .select(
+        `
+          id,
+          title,
+          slug,
+          description,
+          short_description,
+          file_url,
+          file_type,
+          file_size,
+          attachments,
+          external_links,
+          preview_image_url,
+          downloads,
+          created_at,
+          status,
+          user_id,
+          target_grades,
+          resource_types,
+          topics_languages,
+          topics_quran,
+          topics_duas_ziyarat,
+          topics_aqaid,
+          topics_fiqh,
+          topics_akhlaq,
+          topics_tarikh,
+          topics_personalities,
+          topics_islamic_months,
+          topics_other,
+          credit_organization,
+          credit_other,
+          credits,
+          profiles:user_id (
+            id,
+            email,
+            username,
+            full_name,
+            first_name,
+            last_name
+          )
+        `
+      )
+      .eq('id', params.slug)
+
+    const result = await idQuery.single()
+    resource = result.data
+    error = result.error
+  }
 
   if (error || !resource) {
     console.error('Resource not found', error)
@@ -152,7 +211,7 @@ export default async function ResourcePage({ params }: { params: { id: string } 
     .from('resources')
     .select('id, title, short_description, preview_image_url')
     .eq('status', 'approved')
-    .neq('id', params.id)
+    .neq('id', resource.id)
     .limit(4)
 
   const relatedResourcesResponse = primaryCategory

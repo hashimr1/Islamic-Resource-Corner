@@ -48,7 +48,7 @@ interface BaseResourceData {
 }
 
 // Type definition for the resource creation form data
-export interface CreateResourceData extends BaseResourceData {}
+export interface CreateResourceData extends BaseResourceData { }
 
 /**
  * Upload a file to Supabase Storage
@@ -147,12 +147,12 @@ export async function createResource(formData: CreateResourceData) {
     attachments[0] ||
     (formData.fileUrl
       ? {
-          id: 'legacy-file',
-          name: formData.fileUrl.split('/').pop() || 'Resource file',
-          url: formData.fileUrl,
-          size: formData.fileSize ? String(formData.fileSize) : '',
-          type: formData.fileType || '',
-        }
+        id: 'legacy-file',
+        name: formData.fileUrl.split('/').pop() || 'Resource file',
+        url: formData.fileUrl,
+        size: formData.fileSize ? String(formData.fileSize) : '',
+        type: formData.fileType || '',
+      }
       : null)
 
   const hasCategorization = formData.targetGrades.length > 0 && formData.resourceTypes.length > 0
@@ -170,10 +170,41 @@ export async function createResource(formData: CreateResourceData) {
     const attachmentsToSave =
       attachments.length > 0 ? attachments : primaryAttachment ? [primaryAttachment] : []
 
+    // Generate slug
+    const baseSlug = formData.title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+
+    // For uniqueness check, we'll try to insert. If it fails due to unique constraint, we append random string.
+    // However, a better approach for UX is to check first or handle conflict.
+    // For simplicity in this iteration, we'll append a random string if it's not unique or just use a timestamp suffix if we don't want to check.
+    // Actually, let's just append a short random string to ensure uniqueness always, or check.
+    // Let's implement a simple check-free approach for now: slug + random suffix if collision is likely?
+    // Users prefer clean slugs.
+    // Let's do: slug = baseSlug. Then check if exists.
+
+    // Better strategy for this tool call: Just create the slug field in the object.
+
+    // Slug generation logic
+    let slug = baseSlug
+    const { data: existingSlug } = await supabase
+      .from('resources')
+      .select('id')
+      .eq('slug', slug)
+      .single()
+
+    if (existingSlug) {
+      slug = `${slug}-${Math.random().toString(36).substring(2, 7)}`
+    }
+
     // Insert resource into database
     const resourceData = {
       user_id: user.id,
       title: formData.title.trim(),
+      slug: slug,
       short_description: formData.shortDescription?.trim() || null,
       description: formData.description?.trim() || '',
       file_url: primaryAttachment?.url || null,
@@ -272,10 +303,10 @@ export async function updateResource(data: UpdateResourceData) {
     attachments[0] ||
     (data.fileUrl
       ? {
-          url: data.fileUrl,
-          size: data.fileSize ? String(data.fileSize) : '',
-          type: data.fileType || '',
-        }
+        url: data.fileUrl,
+        size: data.fileSize ? String(data.fileSize) : '',
+        type: data.fileType || '',
+      }
       : null)
 
   if (!attachments.length && !externalLinks.length && !primaryAttachment) {
@@ -311,10 +342,12 @@ export async function updateResource(data: UpdateResourceData) {
     copyright_verified: data.copyrightVerified,
   }
 
-  const { error: updateError } = await supabase
+  const { data: updatedResource, error: updateError } = await supabase
     .from('resources')
     .update(updatePayload as any)
     .eq('id', data.id)
+    .select('slug')
+    .single()
 
   if (updateError) {
     console.error('Error updating resource:', updateError)
@@ -323,8 +356,11 @@ export async function updateResource(data: UpdateResourceData) {
 
   revalidatePath('/dashboard')
   revalidatePath(`/resource/${data.id}`)
+  if (updatedResource?.slug) {
+    revalidatePath(`/resource/${updatedResource.slug}`)
+  }
 
-  return { success: true }
+  return { success: true, slug: updatedResource.slug }
 }
 
 /**

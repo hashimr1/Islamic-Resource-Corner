@@ -96,9 +96,37 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert resource into database
+    // Generate unique slug
+    const slugBase = body.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, '')
+    let slug = slugBase
+    let slugExists = true
+    let slugCounter = 0
+
+    while (slugExists) {
+      if (slugCounter > 0) {
+        slug = `${slugBase}-${slugCounter}`
+      }
+      const { data: existingSlug } = await supabase
+        .from('resources')
+        .select('slug')
+        .eq('slug', slug)
+        .single()
+
+      if (!existingSlug) {
+        slugExists = false
+      } else {
+        slugCounter++
+      }
+    }
+
+    // Insert resource into database
     const resourceData = {
       user_id: user.id,
       title: body.title.trim(),
+      slug,
       short_description: body.shortDescription?.trim() || null,
       description: body.description.trim(),
       file_url: body.fileUrl,

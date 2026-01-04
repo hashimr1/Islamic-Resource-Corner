@@ -15,6 +15,7 @@ export const revalidate = 0
 type SearchParams = { [key: string]: string | string[] | undefined }
 type ResourceRow = {
   id: string
+  slug: string | null
   title: string
   short_description: string | null
   preview_image_url: string | null
@@ -61,7 +62,7 @@ export default async function BrowsePage({ searchParams }: { searchParams: Searc
   let query = supabase
     .from('resources')
     .select(
-      'id,title,short_description,preview_image_url,target_grades,resource_types,downloads,created_at',
+      'id,slug,title,short_description,preview_image_url,target_grades,resource_types,downloads,created_at',
       { count: 'exact' }
     )
     .eq('status', 'approved')
@@ -132,7 +133,7 @@ export default async function BrowsePage({ searchParams }: { searchParams: Searc
               <>
                 <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                   {resources.map(resource => (
-                    <Link key={resource.id} href={`/resource/${resource.id}`} className="block h-full">
+                    <Link key={resource.id} href={`/resource/${resource.slug || resource.id}`} className="block h-full">
                       <Card className="h-full flex flex-col overflow-hidden border transition-all duration-300 hover:shadow-lg hover:border-primary/50">
                         {resource.preview_image_url ? (
                           <div className="relative h-44 w-full bg-muted overflow-hidden">

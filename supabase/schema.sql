@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS public.resources (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
   description TEXT NOT NULL,
+  slug TEXT,
   file_url TEXT NOT NULL,
   category TEXT NOT NULL,
   grade_level TEXT,
@@ -60,6 +61,7 @@ CREATE TABLE IF NOT EXISTS public.resources (
 
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_resources_status ON public.resources(status);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_resources_slug ON public.resources(slug);
 CREATE INDEX IF NOT EXISTS idx_resources_category ON public.resources(category);
 CREATE INDEX IF NOT EXISTS idx_resources_user_id ON public.resources(user_id);
 CREATE INDEX IF NOT EXISTS idx_resources_created_at ON public.resources(created_at DESC);

@@ -16,9 +16,9 @@ export async function incrementDownload(resourceId: string) {
 
   const { data: resource, error: fetchError } = await supabase
     .from('resources')
-    .select('downloads')
+    .select('downloads, slug')
     .eq('id', resourceId)
-    .single()
+    .single() as { data: any; error: any }
 
   if (fetchError || !resource) {
     console.error('Failed to load resource for download', fetchError)
@@ -37,7 +37,11 @@ export async function incrementDownload(resourceId: string) {
     return { error: 'Could not increment downloads' }
   }
 
+  // Revalidate both ID and Slug paths to be safe
   revalidatePath(`/resource/${resourceId}`)
+  if (resource.slug) {
+    revalidatePath(`/resource/${resource.slug}`)
+  }
   revalidatePath('/dashboard')
 
   return { success: true }

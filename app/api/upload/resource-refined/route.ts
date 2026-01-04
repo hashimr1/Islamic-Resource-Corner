@@ -88,14 +88,14 @@ export async function POST(request: NextRequest) {
     const legacyAttachment =
       normalizedAttachments.length === 0 && body.fileUrl
         ? [
-            {
-              id: 'legacy-file',
-              name: body.fileUrl?.split('/')?.pop?.() || 'Resource file',
-              url: body.fileUrl,
-              size: body.fileSize ? String(body.fileSize) : '',
-              type: body.fileType || '',
-            },
-          ]
+          {
+            id: 'legacy-file',
+            name: body.fileUrl?.split('/')?.pop?.() || 'Resource file',
+            url: body.fileUrl,
+            size: body.fileSize ? String(body.fileSize) : '',
+            type: body.fileType || '',
+          },
+        ]
         : []
 
     const attachments = normalizedAttachments.length ? normalizedAttachments : legacyAttachment
@@ -103,11 +103,11 @@ export async function POST(request: NextRequest) {
     const externalLinks =
       Array.isArray(body.externalLinks) && body.externalLinks.length
         ? body.externalLinks
-            .filter((link: any) => link?.title && link?.url)
-            .map((link: any) => ({
-              title: String(link.title).trim(),
-              url: String(link.url).trim(),
-            }))
+          .filter((link: any) => link?.title && link?.url)
+          .map((link: any) => ({
+            title: String(link.title).trim(),
+            url: String(link.url).trim(),
+          }))
         : []
     const topicsCurriculum = Array.isArray(body.topicsCurriculum) ? body.topicsCurriculum : []
 
@@ -146,9 +146,37 @@ export async function POST(request: NextRequest) {
     const primaryAttachment = attachments[0]
 
     // Insert resource into database
+    // Generate unique slug
+    const slugBase = body.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, '')
+    let slug = slugBase
+    let slugExists = true
+    let slugCounter = 0
+
+    while (slugExists) {
+      if (slugCounter > 0) {
+        slug = `${slugBase}-${slugCounter}`
+      }
+      const { data: existingSlug } = await supabase
+        .from('resources')
+        .select('slug')
+        .eq('slug', slug)
+        .single()
+
+      if (!existingSlug) {
+        slugExists = false
+      } else {
+        slugCounter++
+      }
+    }
+
+    // Insert resource into database
     const resourceData = {
       user_id: user.id,
       title: body.title.trim(),
+      slug,
       short_description: body.shortDescription.trim(),
       // Allow empty description; store empty string if not provided
       description: (body.detailedDescription ?? '').trim(),

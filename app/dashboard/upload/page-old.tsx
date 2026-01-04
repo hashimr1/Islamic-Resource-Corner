@@ -98,7 +98,7 @@ export default function UploadPage() {
     try {
       // Step 1: Upload resource file (required)
       setUploadProgress('Uploading resource file...')
-      
+
       const resourceFormData = new FormData()
       resourceFormData.append('file', values.resourceFile)
       resourceFormData.append('bucket', 'resource-files')
@@ -120,7 +120,7 @@ export default function UploadPage() {
       let previewImageUrl: string | undefined
       if (values.previewImage) {
         setUploadProgress('Uploading preview image...')
-        
+
         const imageFormData = new FormData()
         imageFormData.append('file', values.previewImage)
         imageFormData.append('bucket', 'resource-thumbnails')
@@ -142,7 +142,7 @@ export default function UploadPage() {
 
       // Step 3: Create resource record in database
       setUploadProgress('Creating resource...')
-      
+
       const createResourceResponse = await fetch('/api/upload/resource', {
         method: 'POST',
         headers: {
@@ -176,7 +176,7 @@ export default function UploadPage() {
 
       // Success! Redirect to the resource page
       setUploadProgress('Success! Redirecting...')
-      router.push(`/resource/${createResourceResult.resourceId}`)
+      router.push(`/resource/${createResourceResult.resource?.slug || createResourceResult.resourceId}`)
     } catch (error) {
       console.error('Upload error:', error)
       setUploadError('An unexpected error occurred. Please try again.')

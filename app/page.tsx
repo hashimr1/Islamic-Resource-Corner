@@ -41,6 +41,7 @@ type FeaturedListRow = {
 
 type ResourcePreview = {
   id: string
+  slug?: string | null
   title: string
   short_description?: string | null
   description?: string | null
@@ -81,7 +82,7 @@ function normalizeCriteria(criteria: FilterCriteria | null | undefined): Require
 
 function ResourceCard({ resource }: { resource: ResourcePreview }) {
   return (
-    <Link key={resource.id} href={`/resource/${resource.id}`} className="block h-full">
+    <Link key={resource.id} href={`/resource/${resource.slug || resource.id}`} className="block h-full">
       <Card className="h-full overflow-hidden border transition-all duration-300 hover:shadow-lg hover:border-primary/50">
         {resource.preview_image_url ? (
           <div className="relative h-44 w-full bg-muted overflow-hidden">
@@ -157,7 +158,7 @@ async function fetchResourcesForCriteria(
 ) {
   let query = supabase
     .from('resources')
-    .select('id,title,short_description,description,preview_image_url,resource_types')
+    .select('id,slug,title,short_description,description,preview_image_url,resource_types')
     .eq('status', 'approved')
 
   if (criteria.grades.length) {
@@ -210,7 +211,7 @@ export default async function HomePage() {
     supabase
       .from('resources')
       .select(
-        'id,title,short_description,description,preview_image_url,resource_types,target_grades'
+        'id,slug,title,short_description,description,preview_image_url,resource_types,target_grades'
       )
       .eq('status', 'approved')
       .overlaps('target_grades', [...ELEMENTARY_GRADES])
@@ -219,7 +220,7 @@ export default async function HomePage() {
     supabase
       .from('resources')
       .select(
-        'id,title,short_description,description,preview_image_url,resource_types,target_grades'
+        'id,slug,title,short_description,description,preview_image_url,resource_types,target_grades'
       )
       .eq('status', 'approved')
       .overlaps('target_grades', [...MIDDLE_GRADES])
@@ -228,7 +229,7 @@ export default async function HomePage() {
     supabase
       .from('resources')
       .select(
-        'id,title,short_description,description,preview_image_url,resource_types,target_grades'
+        'id,slug,title,short_description,description,preview_image_url,resource_types,target_grades'
       )
       .eq('status', 'approved')
       .overlaps('target_grades', [...HIGH_GRADES])
