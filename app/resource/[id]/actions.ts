@@ -1,0 +1,45 @@
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { createSupabaseServerClient } from '@/lib/supabase/server'
+
+/**
+ * Increment the download count for a resource and return its file URL.
+ * SQL intention: UPDATE resources SET downloads = downloads + 1 WHERE id = $1;
+ */
+export async function incrementDownload(resourceId: string) {
+  if (!resourceId) {
+    return { error: 'Missing resource id' }
+  }
+
+  const supabase = createSupabaseServerClient()
+
+  const { data: resource, error: fetchError } = await supabase
+    .from('resources')
+    .select('downloads')
+    .eq('id', resourceId)
+    .single()
+
+  if (fetchError || !resource) {
+    console.error('Failed to load resource for download', fetchError)
+    return { error: 'Resource not found' }
+  }
+
+  const { error: updateError } = await supabase
+    .from('resources')
+    .update({
+      downloads: (resource.downloads ?? 0) + 1,
+    })
+    .eq('id', resourceId)
+
+  if (updateError) {
+    console.error('Failed to increment downloads', updateError)
+    return { error: 'Could not increment downloads' }
+  }
+
+  revalidatePath(`/resource/${resourceId}`)
+  revalidatePath('/dashboard')
+
+  return { success: true }
+}
+
