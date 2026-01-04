@@ -19,6 +19,9 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: 'Islamic Resource Corner',
   description: 'Free Islamic educational resources for teachers, parents, and students',
+  icons: {
+    icon: '/images/favicon.svg',
+  },
 }
 
 export default function RootLayout({
