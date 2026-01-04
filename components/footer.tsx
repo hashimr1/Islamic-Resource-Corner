@@ -28,7 +28,7 @@ export function Footer() {
     <footer className="bg-brand-green text-white font-body">
       <div className="container mx-auto max-w-6xl px-6 py-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start">
+          <div className="flex items-start justify-center md:justify-start">
             <Image
               src="/images/logo-white.svg"
               alt="Islamic Resource Corner logo"
