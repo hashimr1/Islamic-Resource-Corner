@@ -25,14 +25,14 @@ export function DownloadButton({ resourceId, attachment }: DownloadButtonProps) 
     typeof attachment.size === 'number'
       ? attachment.size
       : attachment.size
-      ? Number(attachment.size)
-      : undefined
+        ? Number(attachment.size)
+        : undefined
 
   const fileInfo =
     attachment.type || sizeValue
       ? [attachment.type?.toUpperCase(), sizeValue ? formatFileSize(sizeValue) : null]
-          .filter(Boolean)
-          .join(' • ')
+        .filter(Boolean)
+        .join(' • ')
       : null
 
   const handleClick = () => {
@@ -66,7 +66,7 @@ export function DownloadButton({ resourceId, attachment }: DownloadButtonProps) 
         onClick={handleClick}
         disabled={isPending}
         size="lg"
-        className="w-full gap-2"
+        className="w-full gap-2 bg-brand-yellow hover:bg-brand-yellow-hover text-brand-green-dark font-bold shadow-sm transition-all hover:scale-[1.02]"
       >
         {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5" />}
         Download {attachment.name || 'Resource'}

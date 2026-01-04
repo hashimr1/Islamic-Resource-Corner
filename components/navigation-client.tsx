@@ -34,7 +34,7 @@ export function NavigationClient({ user, profile }: NavigationClientProps) {
   return (
     <nav className="sticky top-0 z-40 w-full border-b bg-background">
       {/* Desktop Navigation */}
-      <div className="container h-24 px-8 hidden lg:flex items-center justify-between">
+      <div className="container h-24 px-8 hidden xl:flex items-center justify-between">
         {/* Logo Area - Left */}
         <div className="flex items-center">
           <Link href="/" className="flex flex-col items-center gap-2">
@@ -74,10 +74,10 @@ export function NavigationClient({ user, profile }: NavigationClientProps) {
         {/* Actions Area - Right */}
         <div className="flex items-center gap-4">
           {/* Donate Button - Always Visible */}
-          <Button asChild size="sm" className="bg-[#ebcc1c] hover:bg-[#d4b619] text-white">
-            <a 
-              href="https://alkisafoundation.org/donate/" 
-              target="_blank" 
+          <Button asChild size="sm" className="bg-brand-yellow hover:bg-brand-yellow-hover text-white">
+            <a
+              href="https://alkisafoundation.org/donate/"
+              target="_blank"
               rel="noopener noreferrer"
             >
               <Heart className="h-4 w-4 mr-2" />
@@ -94,7 +94,7 @@ export function NavigationClient({ user, profile }: NavigationClientProps) {
                 </Link>
               </Button>
 
-              <UserNav 
+              <UserNav
                 user={{
                   id: user.id,
                   email: user.email || '',
@@ -127,7 +127,7 @@ export function NavigationClient({ user, profile }: NavigationClientProps) {
       </div>
 
       {/* Mobile/Tablet Navigation */}
-      <div className="container h-16 px-4 flex lg:hidden items-center justify-between">
+      <div className="container h-16 px-4 flex xl:hidden items-center justify-between">
         {/* Logo - Smaller on mobile */}
         <Link href="/" className="flex items-center">
           <div className="relative h-10 w-auto">
@@ -145,7 +145,7 @@ export function NavigationClient({ user, profile }: NavigationClientProps) {
         {/* Right side: Hamburger + User Avatar */}
         <div className="flex items-center gap-3">
           {user && (
-            <UserNav 
+            <UserNav
               user={{
                 id: user.id,
                 email: user.email || '',
@@ -159,7 +159,7 @@ export function NavigationClient({ user, profile }: NavigationClientProps) {
               }}
             />
           )}
-          
+
           <Button
             variant="ghost"
             size="sm"
@@ -177,16 +177,15 @@ export function NavigationClient({ user, profile }: NavigationClientProps) {
 
       {/* Mobile Menu Sidebar - Overlay Backdrop */}
       {isMobileMenuOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black/50 z-50"
+        <div
+          className="xl:hidden fixed inset-0 bg-black/50 z-50"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
       {/* Mobile Menu Sidebar - Drawer */}
-      <div className={`lg:hidden fixed inset-y-0 left-0 z-50 w-[300px] bg-background shadow-xl transform transition-transform duration-300 ease-in-out ${
-        isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
+      <div className={`xl:hidden fixed inset-y-0 left-0 z-50 w-[300px] bg-background shadow-xl transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
@@ -235,9 +234,9 @@ export function NavigationClient({ user, profile }: NavigationClientProps) {
             {/* Action Buttons */}
             <div className="flex flex-col space-y-3">
               <Button asChild size="default" className="w-full bg-[#ebcc1c] hover:bg-[#d4b619] text-white justify-start">
-                <a 
-                  href="https://alkisafoundation.org/donate/" 
-                  target="_blank" 
+                <a
+                  href="https://alkisafoundation.org/donate/"
+                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   <Heart className="h-4 w-4 mr-2" />

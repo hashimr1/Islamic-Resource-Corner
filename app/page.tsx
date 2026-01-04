@@ -275,58 +275,61 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col">
       <section className="px-4 mt-6">
-        <div className="relative w-full max-w-7xl mx-auto min-h-[500px] overflow-hidden rounded-3xl">
-          <div className="absolute inset-0">
+        <div className="w-full max-w-7xl mx-auto overflow-hidden rounded-3xl grid grid-cols-1 lg:grid-cols-12 min-h-[500px] shadow-xl">
+          {/* Left Side - Content */}
+          <div className="lg:col-span-7 bg-brand-green-dark flex items-center p-8 md:p-12 lg:p-16 relative overflow-hidden">
+            {/* Background Pattern/Texture Overlay (Optional) */}
+            <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat opacity-5 mix-blend-overlay"></div>
+
+            <div className="max-w-xl space-y-8 relative z-10">
+              <div className="space-y-4">
+                <p className="text-xs font-bold tracking-[0.2em] uppercase text-brand-yellow">
+                  Welcome to Islamic Resource Corner
+                </p>
+                <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-white leading-tight font-header">
+                  Discover and share high-quality Islamic educational resources.
+                </h1>
+                <p className="text-lg text-white/90 max-w-lg font-body leading-relaxed">
+                  Join our community of teachers, parents, and students.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <Button
+                  asChild
+                  size="lg"
+                  className="text-base font-semibold bg-brand-yellow text-brand-green-dark hover:bg-brand-yellow-hover border-2 border-transparent transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                >
+                  <Link href="/browse">
+                    <Search className="mr-2 h-5 w-5" />
+                    Browse Resources
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="text-base font-semibold bg-transparent text-white border-white/30 hover:bg-white/10 hover:border-white transition-all"
+                >
+                  <Link href={userData ? '/dashboard/upload' : '/auth/signup'}>
+                    <Upload className="mr-2 h-5 w-5" />
+                    {userData ? 'Upload' : 'Join Community'}
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - Image */}
+          <div className="lg:col-span-5 relative h-[400px] lg:h-auto bg-muted">
             <Image
-              src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1600&q=80"
-              alt="Students studying together"
+              src="/images/KisaKidsTableAtFair.png"
+              alt="Kisa Kids Table at Fair"
               fill
               priority
               className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
-          </div>
-
-          <div className="relative z-10 flex items-center min-h-[500px] md:min-h-[60vh]">
-            <div className="w-full px-8 md:px-12 lg:px-16 py-12 md:py-16 lg:py-20">
-              <div className="max-w-3xl space-y-6">
-                <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/80">
-                  Welcome to Islamic Resource Corner
-                </p>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                  Discover, download, and share quality Islamic educational materials.
-          </h1>
-                <p className="text-lg md:text-xl text-white/90 max-w-2xl">
-                  Join our community of teachers, parents, and students. Discover, download, and share
-                  quality materials.
-          </p>
-
-                <div className="flex flex-wrap items-center gap-4">
-                  <Button
-                    asChild
-                    size="lg"
-                    className="text-lg font-semibold bg-primary text-white hover:bg-primary/90"
-                  >
-              <Link href="/browse">
-                <Search className="mr-2 h-5 w-5" />
-                      Browse
-              </Link>
-            </Button>
-                  <Button
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="text-lg font-semibold bg-white text-black hover:bg-gray-100 border-none"
-                  >
-                    <Link href={userData ? '/dashboard/upload' : '/auth/signup'}>
-                <Upload className="mr-2 h-5 w-5" />
-                      {userData ? 'Upload' : 'Sign Up'}
-              </Link>
-            </Button>
-                </div>
-
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -403,7 +406,7 @@ export default async function HomePage() {
           <div className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold">Explore by Grade</h2>
-          </div>
+            </div>
 
             <div className="space-y-10">
               {gradeSections.map((section, index) => (
@@ -414,7 +417,7 @@ export default async function HomePage() {
                     resources={section.resources}
                   />
                   {index < gradeSections.length - 1 ? <Separator className="mt-8" /> : null}
-        </div>
+                </div>
               ))}
             </div>
           </div>

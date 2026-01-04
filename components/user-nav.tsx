@@ -46,6 +46,7 @@ export function UserNav({ user, profile }: UserNavProps) {
     return 'U'
   }
 
+  const initials = getInitials()
   const displayName = profile.fullName || `${profile.firstName} ${profile.lastName}`.trim() || profile.username || 'User'
 
   return (
@@ -53,8 +54,8 @@ export function UserNav({ user, profile }: UserNavProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarFallback className="bg-[#3e7745] text-white">
-              {getInitials()}
+            <AvatarFallback className="bg-brand-green text-white">
+              {initials}
             </AvatarFallback>
           </Avatar>
         </Button>

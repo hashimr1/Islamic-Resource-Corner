@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -18,7 +18,16 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-open-sans)", "sans-serif"],
+        header: ["var(--font-montserrat)", "sans-serif"],
+        body: ["var(--font-open-sans)", "sans-serif"],
+      },
       colors: {
+        "brand-green": "#3E7745",
+        "brand-green-dark": "#2a522f",
+        "brand-yellow": "#eec64e",
+        "brand-yellow-hover": "#d1ae45",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -99,10 +99,10 @@ function FilterContent({
           key === 'grades'
             ? selectedGrades
             : key === 'types'
-            ? selectedTypes
-            : key === 'curriculum'
-            ? selectedCurriculum
-            : selectedTopics
+              ? selectedTypes
+              : key === 'curriculum'
+                ? selectedCurriculum
+                : selectedTopics
         const isChecked = selectedArray.includes(option)
 
         return (
@@ -186,7 +186,7 @@ export function FilterSidebar() {
 
   const handleClear = () => {
     const params = new URLSearchParams(searchParams.toString())
-    ;['grades', 'types', 'topics', 'curriculum', 'page'].forEach(key => params.delete(key))
+      ;['grades', 'types', 'topics', 'curriculum', 'page'].forEach(key => params.delete(key))
     router.push(`${pathname}?${params.toString()}`)
   }
 
@@ -214,11 +214,11 @@ export function FilterSidebar() {
               Filters {activeFiltersCount > 0 ? <Badge variant="secondary">{activeFiltersCount}</Badge> : null}
             </Button>
           </DialogTrigger>
-          <DialogContent className="fixed right-0 top-0 h-full w-full max-w-sm translate-x-0 translate-y-0 rounded-none border-0 sm:max-w-md sm:border-l">
+          <DialogContent className="fixed right-0 top-0 h-full !w-[90vw] !max-w-none !left-auto sm:!w-full sm:!max-w-md translate-x-0 translate-y-0 rounded-none border-0 border-l flex flex-col">
             <DialogHeader>
               <DialogTitle className="text-left">Refine results</DialogTitle>
             </DialogHeader>
-            <div className="h-full overflow-y-auto pb-6">
+            <div className="flex-1 overflow-y-auto pb-6">
               <FilterContent
                 selectedGrades={selectedGrades}
                 selectedTypes={selectedTypes}
